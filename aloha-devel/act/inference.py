@@ -692,7 +692,7 @@ def get_arguments():
     parser.add_argument('--dim_feedforward', action='store', type=int, help='dim_feedforward', default=3200, required=False)
     parser.add_argument('--temporal_agg', action='store', type=bool, help='temporal_agg', default=True, required=False)
 
-    parser.add_argument('--state_dim', action='store', type=int, help='state_dim', default=14, required=False)
+    parser.add_argument('--state_dim', action='store', type=int, help='state_dim', default=16, required=False)
     parser.add_argument('--lr_backbone', action='store', type=float, help='lr_backbone', default=1e-5, required=False)
     parser.add_argument('--backbone', action='store', type=str, help='backbone', default='resnet18', required=False)
     parser.add_argument('--loss_function', action='store', type=str, help='loss_function l1 l2 l1+l2', default='l1', required=False)
@@ -726,13 +726,13 @@ def get_arguments():
                         default='/puppet/joint_right', required=False)
     
     parser.add_argument('--robot_base_topic', action='store', type=str, help='robot_base_topic',
-                        default='/odom_raw', required=False)
+                        default='/odom', required=False)
     parser.add_argument('--robot_base_cmd_topic', action='store', type=str, help='robot_base_topic',
                         default='/cmd_vel', required=False)
     parser.add_argument('--use_robot_base', action='store', type=bool, help='use_robot_base',
-                        default=False, required=False)
+                        default=True, required=False)
     parser.add_argument('--publish_rate', action='store', type=int, help='publish_rate',
-                        default=40, required=False)
+                        default=30, required=False)
     parser.add_argument('--pos_lookahead_step', action='store', type=int, help='pos_lookahead_step',
                         default=0, required=False)
     parser.add_argument('--chunk_size', action='store', type=int, help='chunk_size',

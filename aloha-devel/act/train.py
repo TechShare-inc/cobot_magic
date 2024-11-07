@@ -213,6 +213,9 @@ def train_process(train_dataloader, val_dataloader, config, stats):
         for k, v in epoch_summary.items():
             summary_string += f'{k}: {v.item():.3f} '
         print(summary_string)
+        # release the tensors
+        #del epoch_dicts, forward_dict, result, data
+        #torch.cuda.empty_cache()
 
         # training
         policy.train()
@@ -226,6 +229,7 @@ def train_process(train_dataloader, val_dataloader, config, stats):
             optimizer.step()
             optimizer.zero_grad()
             train_history.append(detach_dict(forward_dict))
+            # print(torch.cuda.memory_summary())
         epoch_summary = compute_dict_mean(train_history[(batch_idx+1)*epoch:(batch_idx+1)*(epoch+1)])
         epoch_train_loss = epoch_summary['loss']
         print(f'Train loss: {epoch_train_loss:.5f}')
@@ -233,6 +237,9 @@ def train_process(train_dataloader, val_dataloader, config, stats):
         for k, v in epoch_summary.items():
             summary_string += f'{k}: {v.item():.3f} '
         print(summary_string)
+        # release the tensors
+        #del forward_dict, result, loss, data
+        #torch.cuda.empty_cache()
 
         if epoch % 100 == 0:
             ckpt_path = os.path.join(ckpt_dir, f'policy_epoch_{epoch}_seed_{seed}.ckpt')
@@ -295,7 +302,7 @@ def get_arguments():
     parser.add_argument('--masks', action='store_true',
                         help="Train segmentation head if the flag is provided")
 
-    parser.add_argument('--state_dim', action='store', type=int, help='state_dim', default=14, required=False)
+    parser.add_argument('--state_dim', action='store', type=int, help='state_dim', default=16, required=False)
     parser.add_argument('--lr_backbone', action='store', type=float, help='lr_backbone', default=4e-5, required=False)
     parser.add_argument('--backbone', action='store', type=str, help='backbone', default='resnet18', required=False)
     parser.add_argument('--loss_function', action='store', type=str, help='loss_function l1 l2 l1+l2', default='l1', required=False)
